@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -87,11 +88,23 @@ func main() {
 		if err != nil {
 			fmt.Printf("Error seeking start of file: %s\n", err)
 		}
-		scanner := bufio.NewScanner(file)
+		reader := bufio.NewReader(file)
 
-		for scanner.Scan() {
+		charCount := 0
 
+		for {
+			_, size, err := reader.ReadRune()
+			if err != nil {
+				if err == io.EOF {
+					break
+				}
+				fmt.Printf("Error reading runes: %s\n", err)
+			}
+
+			charCount++
+			reader.Discard(size)
 		}
+		fmt.Printf("Number of characters: %d\n", charCount)
 	}
 
 }
