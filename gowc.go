@@ -4,10 +4,10 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"strings"
+	"unicode/utf8"
 )
 
 func main() {
@@ -88,22 +88,15 @@ func main() {
 		if err != nil {
 			fmt.Printf("Error seeking start of file: %s\n", err)
 		}
-		reader := bufio.NewReader(file)
-
-		charCount := 0
-
-		for {
-			_, size, err := reader.ReadRune()
-			if err != nil {
-				if err == io.EOF {
-					break
-				}
-				fmt.Printf("Error reading runes: %s\n", err)
-			}
-
-			charCount++
-			reader.Discard(size)
+		readFile, err := os.ReadFile(absPath)
+		if err != nil {
+			fmt.Printf("Error reading file to count chars: %s\n", err)
 		}
+
+		fileString := string(readFile)
+
+		charCount := utf8.RuneCountInString(fileString)
+
 		fmt.Printf("Number of characters: %d\n", charCount)
 	}
 
