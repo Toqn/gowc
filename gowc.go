@@ -16,6 +16,7 @@ func main() {
 	byteCountFlag := flag.Bool("c", false, "File byte count")
 	lineCountFlag := flag.Bool("l", false, "File line count")
 	wordCountFlag := flag.Bool("w", false, "File word count")
+	charCountFlag := flag.Bool("m", false, "File character count")
 
 	flag.Parse()
 
@@ -24,7 +25,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if !*byteCountFlag && !*lineCountFlag && !*wordCountFlag {
+	if !*byteCountFlag && !*lineCountFlag && !*wordCountFlag && !*charCountFlag {
 		fmt.Println("No flags specified")
 		flag.Usage()
 		os.Exit(0)
@@ -79,6 +80,18 @@ func main() {
 		}
 
 		fmt.Printf("Number of words: %d\n", wordCount)
+	}
+
+	if *charCountFlag {
+		_, err := file.Seek(0, 0)
+		if err != nil {
+			fmt.Printf("Error seeking start of file: %s\n", err)
+		}
+		scanner := bufio.NewScanner(file)
+
+		for scanner.Scan() {
+
+		}
 	}
 
 }
