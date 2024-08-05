@@ -24,3 +24,6 @@ go.work.sum
 # Ignore other possible binaries without extensions
 # This will ignore any files in the root directory without an extension
 *.[[:alnum:]]*
+
+# Ignore .txt
+.txt
