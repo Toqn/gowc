@@ -18,8 +18,14 @@ func main() {
 	lineCountFlag := flag.Bool("l", false, "File line count")
 	wordCountFlag := flag.Bool("w", false, "File word count")
 	charCountFlag := flag.Bool("m", false, "File character count")
+	helpFlag := flag.Bool("h", false, "Help")
 
 	flag.Parse()
+
+	if *helpFlag {
+		flag.Usage()
+		os.Exit(0)
+	}
 
 	if fileName == "" {
 		fmt.Println("No file specified.")
@@ -43,6 +49,12 @@ func main() {
 	}
 	defer file.Close()
 
+	if !*byteCountFlag && !*lineCountFlag && !*wordCountFlag && !*charCountFlag {
+		*byteCountFlag = true
+		*lineCountFlag = true
+		*wordCountFlag = true
+	}
+
 	fileInfo, err := file.Stat()
 	if err != nil {
 		fmt.Printf("Error getting file info: %s", err)
@@ -50,7 +62,7 @@ func main() {
 
 	if *byteCountFlag {
 		byteCount := fileInfo.Size()
-		fmt.Printf("Bytes: %d\n", byteCount)
+		fmt.Printf("%d ", byteCount)
 	}
 
 	if *lineCountFlag {
@@ -60,7 +72,7 @@ func main() {
 			lineCount++
 		}
 
-		fmt.Printf("Number of lines: %d\n", lineCount)
+		fmt.Printf("%d ", lineCount)
 	}
 
 	if *wordCountFlag {
@@ -80,7 +92,7 @@ func main() {
 			fmt.Printf("Encountered error while reading file: %s", err)
 		}
 
-		fmt.Printf("Number of words: %d\n", wordCount)
+		fmt.Printf("%d ", wordCount)
 	}
 
 	if *charCountFlag {
@@ -97,7 +109,8 @@ func main() {
 
 		charCount := utf8.RuneCountInString(fileString)
 
-		fmt.Printf("Number of characters: %d\n", charCount)
+		fmt.Printf("%d ", charCount)
 	}
 
+	fmt.Printf("%s\n", fileName)
 }
